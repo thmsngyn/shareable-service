@@ -28,8 +28,8 @@ See https://code.visualstudio.com/updates/v1_22#_node-debugging for debugging ti
 
 ## Gotchas
 
-`Starting inspector on 127.0.0.1:5858 failed: address already in use`
+- `Starting inspector on 127.0.0.1:5858 failed: address already in use`
 
-The debugger process didn't detach after you attached, kill the process manually.
+  The debugger process didn't detach after you attached, kill the process manually.
 
-`$ npm run kill-debugger`
+  `$ npm run kill-debugger`
