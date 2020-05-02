@@ -1,12 +1,4 @@
-import * as express from "express";
-import * as cors from "cors";
-import * as bodyParser from "body-parser";
+import app from "./app";
+import { PORT } from "./constants/server.constants";
 
-const PORT = 4000;
-const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-app.listen(PORT, function () {
-  console.log("Server is running on Port: " + PORT);
-});
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
