@@ -1,3 +1,9 @@
+## Description
+
+Backend service to power the Shareable frontend.
+
+Built with Express and MongoDB, written in Typescript.
+
 ## Setup
 
 Install dependencies.
