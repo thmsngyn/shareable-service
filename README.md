@@ -4,6 +4,12 @@ Backend service to power the Shareable frontend.
 
 Built with Express and MongoDB, written in Typescript.
 
+## Requirements
+
+- NPM
+- Docker (version 19.03.8)
+- docker-compose (version 1.25.4)
+
 ## Setup
 
 Install dependencies.
