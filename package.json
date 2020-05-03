@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+    "prestart:watch": "docker-compose up -d",
     "start:watch": "nodemon",
     "build": "tsc",
-    "kill-debugger": "sudo kill $(sudo lsof -t -i:5858)"
+    "kill-debugger": "sudo kill $(sudo lsof -t -i:5858)",
+    "clean-containers": "docker-compose down",
+    "show-containers": "docker ps"
   },
   "nodemonConfig": {
     "ignore": [

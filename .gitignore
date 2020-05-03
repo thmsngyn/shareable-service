@@ -11,6 +11,7 @@
 # production
 /build
 /dist
+/svc-vol
 
 # misc
 .DS_Store
