@@ -18,6 +18,10 @@ Build the project, generates artifacts in `/dist` folder.
 
 `$ npm run build`
 
+Optionally tear down containers.
+
+`$ npm run clean-containers`
+
 ## Debugging in VS Code
 
 In VS Code, open the command palette.
@@ -39,3 +43,7 @@ See https://code.visualstudio.com/updates/v1_22#_node-debugging for debugging ti
   The debugger process didn't detach after you attached, kill the process manually.
 
   `$ npm run kill-debugger`
+
+- View available containers. See https://docs.docker.com/engine/reference/commandline/cli/ for more info.
+
+  `$ docker ps`
