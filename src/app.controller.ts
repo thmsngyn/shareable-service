@@ -1,6 +1,7 @@
 import { Application } from "express";
 
 import { AccountService } from "./services";
+import { AccountRouter } from "./routes";
 
 export class AppController {
   private accountService: AccountService;
@@ -12,5 +13,8 @@ export class AppController {
 
   public routes() {
     this.app.route("/").get(this.accountService.welcomeMessage);
+
+    // Accounts
+    this.app.use("/accounts", AccountRouter);
   }
 }

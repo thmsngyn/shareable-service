@@ -1,0 +1,11 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Shareable API",
+      "description": "Shareable service"
+    }
+  },
+  "apis": ["./src/routes/*.route.ts", "./src/models/*.model.ts"]
+}

@@ -1,10 +1,18 @@
 import express, { Application } from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+
 import mongoose from "mongoose";
+
+import * as swaggerDocument from "../swagger.json";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 import { AppController } from "./app.controller";
 import { DB_URI } from "./constants";
+
+// Swagger jsdoc allows us to markup routes with jsdoc comments
+const swaggerSpec = swaggerJSDoc(swaggerDocument);
 
 class App {
   public app: Application;
@@ -25,6 +33,9 @@ class App {
 
     // Enables cors
     this.app.use(cors());
+
+    // Use Swagger
+    this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   }
 
   private setMongoConfig() {
