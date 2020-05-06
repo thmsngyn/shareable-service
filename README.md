@@ -57,3 +57,7 @@ Visit `https://hostname/api-docs`, ie. `http://localhost:4000/api-docs`.
 - View available containers. See https://docs.docker.com/engine/reference/commandline/cli/ for more info.
 
   `$ docker ps`
+
+- `ERROR: Couldn't connect to Docker daemon. You might need to start Docker for Mac.`
+
+  Make sure to run the docker for mac app. There should be a whale icon at the top bar.

@@ -12,8 +12,6 @@ export class AppController {
   }
 
   public routes() {
-    this.app.route("/").get(this.accountService.welcomeMessage);
-
     // Accounts
     this.app.use("/accounts", AccountRouter);
   }
