@@ -7,16 +7,27 @@ import mongoose from "mongoose";
  *   Account:
  *     type: object
  *     required:
- *       - email
+ *       - spotifyUserId
  *     properties:
+ *       spotifyUserId:
+ *         type: string
  *       email:
  *         type: string
  *       loggedIn:
  *         type: boolean
+ *       followers:
+ *         type: [{ spotifyUserId: String }]
  */
-const AccountSchema = new mongoose.Schema({
+export const AccountSchema = new mongoose.Schema({
+  spotifyUserId: { type: String, default: "jenneee" },
+  displayName: String,
+  imageUrl: String,
   email: String,
-  loggedIn: Boolean,
+  loggedIn: { type: Boolean, default: true },
+  followers: {
+    type: [{ spotifyUserId: String }],
+    default: [],
+  },
 });
 
 export const AccountModel = mongoose.model("Account", AccountSchema);

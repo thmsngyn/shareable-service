@@ -2,6 +2,7 @@ import express from "express";
 
 import { AccountService } from "./../services/account.service";
 
+const accountService = new AccountService();
 const Router = express.Router();
 
 /**
@@ -21,7 +22,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Account'
  */
-Router.get("/", AccountService.getAllAccounts);
+Router.get("/", accountService.getAllAccountsRequest);
 
 /**
  * @swagger
@@ -44,7 +45,7 @@ Router.get("/", AccountService.getAllAccounts);
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/", AccountService.addAccount);
-Router.delete("/:id", AccountService.deleteAccount);
+Router.post("/", accountService.addAccountRequest);
+Router.delete("/:id", accountService.deleteAccountRequest);
 
 export default Router;
