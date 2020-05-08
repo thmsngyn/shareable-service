@@ -9,7 +9,7 @@ export class AccountService {
 
   // TODO: Remove temp token (for development)
   private token =
-    "BQB88PR0EHPFfhnXuN3TLLlWHBPuxWpYO53tunD4pUFYyg4SwC6SwlYPS-suf3jii0Fu7JOgGPk6SSxUMgbTEiaFWo2ZNhppBFvrBupbdzp6eceRuOhWWfjLLjAMVc_Iv06chqLCbfKRP6TTMZAYOC5VfSraylL3zn-cC16rYdpBea0oQZZ_";
+    "BQCJHjNl6EI3UE8rb9hkN9lLt2eUtSh14RGWZHvqCDqEDy1bQYsjaX1XKvSV4WazUNUiJb3AdEHqa3ejQC5X_REMaJjtFFL-dUUpHSS6vWOc0k7Dz7RabqrjvviL3b8qd4MncwDmP3k9xbuYH7mzhbqzo9q7kQMV_t2kH5HTrVpM5Hc74Y0s";
 
   constructor() {
     this.router = express.Router();
@@ -54,15 +54,14 @@ export class AccountService {
    */
   private resolveFollowersWithAction(
     action: Function,
-    token: string,
     req: Request,
     res: Response
   ) {
-    const { spotifyUserId } = req.body;
+    const { spotifyUserId, token = this.token } = req.body;
 
     // Find all users besides the current one
     AccountModel.find(
-      { spotifyUserId: { $ne: spotifyUserId } },
+      { spotifyUserId: { $ne: spotifyUserId } }, // Exclude the current account from the request
       "spotifyUserId",
       (error: Error, allAccounts: any) => {
         // Something might've happened, so handle the error
@@ -92,31 +91,28 @@ export class AccountService {
   }
 
   public addAccountRequest(req: Request, res: Response) {
-    const { body: currentAccount } = req;
-    const { token = this.token } = req.body;
+    const { body: accountToAdd } = req;
 
     // Object destructuring in the params of the function
     // Instantiates an AccountModel and adds an account
     const addAccountAction = ({ followers }: { followers: any[] }) => {
-      const account = new AccountModel({
-        ...currentAccount,
+      const newAccount = new AccountModel({
+        ...accountToAdd,
         followers,
       });
 
-      account.save((error: Error, account: MongooseDocument) => {
+      newAccount.save((error: Error, account: MongooseDocument) => {
         this.handleError(error, res, { fromMongo: true });
         res.json(account);
       });
     };
 
     // Resolves latest followers and runs the addAccountAction
-    this.resolveFollowersWithAction(addAccountAction, token, req, res);
+    this.resolveFollowersWithAction(addAccountAction, req, res);
   }
 
   public async loginRequest(req: Request, res: Response) {
-    const { body } = req;
-    const { token = this.token } = body;
-    const { spotifyUserId, loggedIn = true } = body;
+    const { spotifyUserId, loggedIn = true } = req.body;
 
     // Find user and ensure they exist
     const exists = await AccountModel.exists({ spotifyUserId });
@@ -138,7 +134,7 @@ export class AccountService {
     };
 
     // Resolves latest followers and runs the loginAction
-    this.resolveFollowersWithAction(updateLoginAction, token, req, res);
+    this.resolveFollowersWithAction(updateLoginAction, req, res);
   }
 
   public getAllAccountsRequest(req: Request, res: Response) {

@@ -39,9 +39,17 @@ class App {
   }
 
   private setMongoConfig() {
+    // Below removes deprecation warnings
+    const deprecationWarningConfigs = {
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    };
+
     mongoose.Promise = global.Promise;
     mongoose.connect(DB_URI, {
       useNewUrlParser: true,
+      ...deprecationWarningConfigs,
     });
   }
 }
