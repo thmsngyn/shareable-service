@@ -100,7 +100,6 @@ export const SpotifyService = new (class {
     method: string,
     body?: any
   ): Promise<any> {
-    console.log(url);
     return fetch(url, {
       method,
       headers: new Headers({
