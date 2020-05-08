@@ -19,7 +19,11 @@ import mongoose from "mongoose";
  *         type: [{ spotifyUserId: String }]
  */
 export const AccountSchema = new mongoose.Schema({
-  spotifyUserId: { type: String, default: "jenneee" },
+  spotifyUserId: {
+    type: String,
+    unique: true,
+    required: true,
+  },
   displayName: String,
   imageUrl: String,
   email: String,

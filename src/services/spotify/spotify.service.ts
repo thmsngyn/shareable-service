@@ -78,11 +78,18 @@ export const SpotifyService = new (class {
     ids: string[],
     type: string = "user"
   ): Promise<any> {
+    const idsParam = ids.length
+      ? `&ids=${encodeURIComponent(ids.join(","))}`
+      : "";
+
+    if (!idsParam) {
+      // We can't check if the ids list is empty, return []
+      return new Promise((resolve) => resolve([]));
+    }
+
     return this.request(
       token,
-      `${CHECK_FOLLOWING_API}?type=${type}&ids=${encodeURIComponent(
-        ids.join(",")
-      )}`,
+      `${CHECK_FOLLOWING_API}?type=${type}${idsParam}`,
       "GET"
     );
   }

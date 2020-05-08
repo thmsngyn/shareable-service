@@ -22,7 +22,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Account'
  */
-Router.get("/", accountService.getAllAccountsRequest);
+Router.get("/", accountService.getAllAccountsRequest.bind(accountService));
 
 /**
  * @swagger
@@ -45,7 +45,9 @@ Router.get("/", accountService.getAllAccountsRequest);
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/", accountService.addAccountRequest);
-Router.delete("/:id", accountService.deleteAccountRequest);
+Router.post("/", accountService.addAccountRequest.bind(accountService));
+Router.delete("/:id", accountService.deleteAccountRequest.bind(accountService));
+
+Router.post("/login", accountService.loginRequest.bind(accountService));
 
 export default Router;
