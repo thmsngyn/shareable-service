@@ -8,7 +8,7 @@ import * as swaggerDocument from "../swagger.json";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
-import { AppController } from "./app.controller";
+import { AppRouter } from "./app.router";
 import { DB_URI } from "./constants";
 
 // Swagger jsdoc allows us to markup routes with jsdoc comments
@@ -16,7 +16,7 @@ const swaggerSpec = swaggerJSDoc(swaggerDocument);
 
 class App {
   public app: Application;
-  public appController: AppController;
+  public appRouter: AppRouter;
 
   constructor() {
     this.app = express();
@@ -24,7 +24,7 @@ class App {
     this.setMongoConfig();
 
     // Create and assign controller to app
-    this.appController = new AppController(this.app);
+    this.appRouter = new AppRouter(this.app);
   }
 
   private setAppConfig() {

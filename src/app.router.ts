@@ -1,13 +1,9 @@
 import { Application } from "express";
 
-import { AccountService } from "./services";
 import { AccountRouter } from "./routes";
 
-export class AppController {
-  private accountService: AccountService;
-
+export class AppRouter {
   constructor(private app: Application) {
-    this.accountService = new AccountService();
     this.routes();
   }
 
