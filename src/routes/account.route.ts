@@ -1,6 +1,6 @@
 import express from "express";
 
-import { AccountService } from "./../services/account.service";
+import { AccountService } from "../services";
 
 const accountService = new AccountService();
 const Router = express.Router();
@@ -48,6 +48,27 @@ Router.get("/", accountService.getAllAccountsRequest.bind(accountService));
 Router.post("/", accountService.addAccountRequest.bind(accountService));
 Router.delete("/:id", accountService.deleteAccountRequest.bind(accountService));
 
+/**
+ * @swagger
+ *
+ * /accounts:
+ *   post:
+ *     description: Update an account's login status
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - description: Account object
+ *         in:  body
+ *         required: true
+ *         type: object
+ *         schema:
+ *           $ref: '#/definitions/Account'
+ *     responses:
+ *       200:
+ *         description: Account object
+ *         schema:
+ *           $ref: '#/definitions/Account'
+ */
 Router.post("/login", accountService.loginRequest.bind(accountService));
 
 export default Router;

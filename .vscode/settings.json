@@ -9,6 +9,6 @@
   "[typescript]": {
     "editor.formatOnSave": true
   },
-  "cSpell.ignoreWords": ["spotify", "deduped"],
+  "cSpell.ignoreWords": ["spotify", "deduped", "errmsg"],
   "debug.node.autoAttach": "off"
 }

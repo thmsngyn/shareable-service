@@ -1,18 +1,14 @@
-import express, { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { MongooseDocument } from "mongoose";
 
-import { SpotifyService } from "./spotify/spotify.service";
-import { AccountModel } from "../models";
+import { ShareableErrorCodes } from "../base-router-service/base-router.constants";
+import { BaseRouterService } from "../base-router-service";
+import { SpotifyService } from "../spotify/spotify.service";
+import { AccountModel } from "../../models";
 
-export class AccountService {
-  private router: Router = undefined;
-
-  // TODO: Remove temp token (for development)
-  private token =
-    "BQCJHjNl6EI3UE8rb9hkN9lLt2eUtSh14RGWZHvqCDqEDy1bQYsjaX1XKvSV4WazUNUiJb3AdEHqa3ejQC5X_REMaJjtFFL-dUUpHSS6vWOc0k7Dz7RabqrjvviL3b8qd4MncwDmP3k9xbuYH7mzhbqzo9q7kQMV_t2kH5HTrVpM5Hc74Y0s";
-
+export class AccountService extends BaseRouterService {
   constructor() {
-    this.router = express.Router();
+    super();
   }
 
   private buildFollowers(followings: boolean[], allAccounts: any[]) {
@@ -24,25 +20,6 @@ export class AccountService {
         }
       })
       .filter(Boolean); // Filter out undefined
-  }
-
-  private handleError(error: any, res: Response, options: any = {}) {
-    const { fromSpotify, fromMongo } = options;
-
-    if (error) {
-      const {
-        status = 500,
-        message: spotifyErrorMessage,
-        errmsg: mongooseErrorMessage,
-        code: mongoErrorCode,
-      } = error;
-      const message =
-        spotifyErrorMessage || mongooseErrorMessage || "Unknown error occurred";
-
-      res
-        .status(status)
-        .json({ message, mongoErrorCode, fromSpotify, fromMongo });
-    }
   }
 
   /**
@@ -65,7 +42,7 @@ export class AccountService {
       "spotifyUserId",
       (error: Error, allAccounts: any) => {
         // Something might've happened, so handle the error
-        this.handleError(error, res, { fromMongo: true });
+        this.handleError(error, res);
 
         const userIds = allAccounts.map(
           (account: any) => account.spotifyUserId
@@ -75,15 +52,18 @@ export class AccountService {
         SpotifyService.checkFollowers(token, userIds).then(
           (followings: any | boolean[]) => {
             const { error } = followings;
-            // Something might've happened, so handle the error
-            this.handleError(error, res, { fromSpotify: true });
 
-            // These are the current user's followers
-            const followers = this.buildFollowers(followings, userIds);
-            const params = { followers };
+            if (error) {
+              // Something might've happened, so handle the error
+              this.handleError(error, res);
+            } else {
+              // These are the current user's followers
+              const followers = this.buildFollowers(followings, userIds);
+              const params = { followers };
 
-            // Dispatch the subsequent action with params
-            action(params);
+              // Dispatch the subsequent action with params
+              action(params);
+            }
           }
         );
       }
@@ -102,7 +82,7 @@ export class AccountService {
       });
 
       newAccount.save((error: Error, account: MongooseDocument) => {
-        this.handleError(error, res, { fromMongo: true });
+        this.handleError(error, res);
         res.json(account);
       });
     };
@@ -117,7 +97,12 @@ export class AccountService {
     // Find user and ensure they exist
     const exists = await AccountModel.exists({ spotifyUserId });
     if (!exists) {
-      return this.handleError({ message: "Account doesn't exist" }, res);
+      return this.handleError(
+        {
+          code: ShareableErrorCodes.AccountNotFound,
+        },
+        res
+      );
     }
 
     // Finds and updates the account with the latest follower data and login status
@@ -127,7 +112,7 @@ export class AccountService {
         { $set: { followers, loggedIn } },
         { new: true },
         (error: Error, account: MongooseDocument) => {
-          this.handleError(error, res, { fromMongo: true });
+          this.handleError(error, res);
           res.json(account);
         }
       );
@@ -139,9 +124,7 @@ export class AccountService {
 
   public getAllAccountsRequest(req: Request, res: Response) {
     AccountModel.find({}, (error: Error, accounts: MongooseDocument) => {
-      if (error) {
-        res.json({ error });
-      }
+      this.handleError(error, res);
       res.json(accounts);
     });
   }
@@ -151,18 +134,14 @@ export class AccountService {
 
     if (accountId === "all") {
       AccountModel.deleteMany({}, (error: Error) => {
-        if (error) {
-          res.json({ error });
-        }
+        this.handleError(error, res);
         res.json({ message: "All accounts deleted" });
       });
     } else {
       AccountModel.findByIdAndDelete(
         accountId,
         (error: Error, deleted: any) => {
-          if (error) {
-            res.json({ error });
-          }
+          this.handleError(error, res);
           const message = deleted
             ? `Account ID ${accountId} deleted successfully`
             : `Account ID ${accountId} not found`;
