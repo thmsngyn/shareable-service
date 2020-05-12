@@ -1,16 +1,17 @@
-import { Response } from "express";
+import { Response, Request } from "express";
 
 import { ShareableError } from "./base-router.types";
 import {
   MongoToShareableErrorCode,
   SpotifyToShareableErrorCode,
   ShareableErrorMessage,
+  SpotifyToken,
 } from "./base-router.constants";
+import { MongooseDocument } from "mongoose";
 
 export class BaseRouterService {
   // TODO: Remove temp token (for development)
-  public token =
-    "BQBzj7naJ6SxfyUcoCBkgKqHJL6ue9lQQfy2JrJ5q_zNf1amGFY2Dao2SOvLCl3xDnyd88hU6VgeSHJoWVlzGk9p1AnXxUjjG-KNpDc7ok2xrCuLko0yZu6FnAHs5FHAPmoFJ3fmGQuyNgKfhvIuWtcfkofgnKDgOrax_zcYUGCKJpZnXgaJ";
+  public token = SpotifyToken;
 
   constructor() {}
 
@@ -58,5 +59,31 @@ export class BaseRouterService {
       // Return so we break the stack
       return;
     }
+  }
+
+  public removeDocumentRequest(req: Request, res: Response, model: any) {
+    const accountId = req.params.id;
+
+    if (accountId === "all") {
+      model.deleteMany({}, (error: Error) => {
+        this.handleError(error, res);
+        res.json({ message: "All deleted" });
+      });
+    } else {
+      model.findByIdAndDelete(accountId, (error: Error, deleted: any) => {
+        this.handleError(error, res);
+        const message = deleted
+          ? `ID ${accountId} deleted successfully`
+          : `ID ${accountId} not found`;
+        res.json({ message });
+      });
+    }
+  }
+
+  public getAllDocumentsRequest(req: Request, res: Response, model: any) {
+    model.find({}, (error: Error, accounts: MongooseDocument) => {
+      this.handleError(error, res);
+      res.json(accounts);
+    });
   }
 }

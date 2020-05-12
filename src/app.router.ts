@@ -1,6 +1,6 @@
 import { Application } from "express";
 
-import { AccountRouter } from "./routes";
+import { AccountRouter, StreamRouter } from "./routes";
 
 export class AppRouter {
   constructor(private app: Application) {
@@ -8,7 +8,7 @@ export class AppRouter {
   }
 
   public routes() {
-    // Accounts
     this.app.use("/accounts", AccountRouter);
+    this.app.use("/stream", StreamRouter);
   }
 }

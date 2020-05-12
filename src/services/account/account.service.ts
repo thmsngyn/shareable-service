@@ -15,8 +15,8 @@ export class AccountService extends BaseRouterService {
     return followings
       .map((isFollowing: boolean, index: number) => {
         if (isFollowing) {
-          const spotifyUserId = allAccounts[index];
-          return { spotifyUserId }; // Mongo will also include _id for each of these users in the followers list... magic
+          const { _id, spotifyUserId } = allAccounts[index];
+          return { _id, spotifyUserId };
         }
       })
       .filter(Boolean); // Filter out undefined
@@ -58,7 +58,7 @@ export class AccountService extends BaseRouterService {
               this.handleError(error, res);
             } else {
               // These are the current user's followers
-              const followers = this.buildFollowers(followings, userIds);
+              const followers = this.buildFollowers(followings, allAccounts);
               const params = { followers };
 
               // Dispatch the subsequent action with params
@@ -123,31 +123,10 @@ export class AccountService extends BaseRouterService {
   }
 
   public getAllAccountsRequest(req: Request, res: Response) {
-    AccountModel.find({}, (error: Error, accounts: MongooseDocument) => {
-      this.handleError(error, res);
-      res.json(accounts);
-    });
+    super.getAllDocumentsRequest(req, res, AccountModel);
   }
 
   public deleteAccountRequest(req: Request, res: Response) {
-    const accountId = req.params.id;
-
-    if (accountId === "all") {
-      AccountModel.deleteMany({}, (error: Error) => {
-        this.handleError(error, res);
-        res.json({ message: "All accounts deleted" });
-      });
-    } else {
-      AccountModel.findByIdAndDelete(
-        accountId,
-        (error: Error, deleted: any) => {
-          this.handleError(error, res);
-          const message = deleted
-            ? `Account ID ${accountId} deleted successfully`
-            : `Account ID ${accountId} not found`;
-          res.json({ message });
-        }
-      );
-    }
+    super.removeDocumentRequest(req, res, AccountModel);
   }
 }

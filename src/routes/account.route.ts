@@ -2,7 +2,7 @@ import express from "express";
 
 import { AccountService } from "../services";
 
-const accountService = new AccountService();
+const service = new AccountService();
 const Router = express.Router();
 
 /**
@@ -22,7 +22,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Account'
  */
-Router.get("/", accountService.getAllAccountsRequest.bind(accountService));
+Router.get("/", service.getAllAccountsRequest.bind(service));
 
 /**
  * @swagger
@@ -45,8 +45,23 @@ Router.get("/", accountService.getAllAccountsRequest.bind(accountService));
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/", accountService.addAccountRequest.bind(accountService));
-Router.delete("/:id", accountService.deleteAccountRequest.bind(accountService));
+Router.post("/", service.addAccountRequest.bind(service));
+
+/**
+ * @swagger
+ *
+ * /accounts:
+ *   post:
+ *     description: Delete an account
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *     responses:
+ *       200:
+ *         description: Message object
+ *         type: string
+ */
+Router.delete("/:id", service.deleteAccountRequest.bind(service));
 
 /**
  * @swagger
@@ -69,6 +84,6 @@ Router.delete("/:id", accountService.deleteAccountRequest.bind(accountService));
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/login", accountService.loginRequest.bind(accountService));
+Router.post("/login", service.loginRequest.bind(service));
 
 export default Router;
