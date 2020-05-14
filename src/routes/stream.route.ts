@@ -51,7 +51,7 @@ Router.post("/share", service.addShareRequest.bind(service));
  * @swagger
  *
  * /stream/share:
- *   post:
+ *   delete:
  *     description: Delete a share
  *     produces:
  *       - application/json

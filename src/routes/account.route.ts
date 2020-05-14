@@ -51,7 +51,7 @@ Router.post("/", service.addAccountRequest.bind(service));
  * @swagger
  *
  * /accounts:
- *   post:
+ *   delete:
  *     description: Delete an account
  *     produces:
  *       - application/json
@@ -66,7 +66,7 @@ Router.delete("/:id", service.deleteAccountRequest.bind(service));
 /**
  * @swagger
  *
- * /accounts:
+ * /accounts/login:
  *   post:
  *     description: Update an account's login status
  *     produces:
