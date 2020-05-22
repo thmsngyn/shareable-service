@@ -8,21 +8,22 @@ interface AppConfig {
   dbUri: string;
 }
 
-const dev: AppConfig = {
+const dev: Partial<AppConfig> = {
   appPort: "4000",
   dbUri: LOCAL_DB_URI,
 };
 
-const prod: AppConfig = {
+const prod: Partial<AppConfig> = {
   appPort: process.env.PORT,
   dbUri: process.env.MONGODB_URI,
 };
 
-const config: AppConfig = process.env.NODE_ENV === "production" ? prod : dev;
+const envConfig: Partial<AppConfig> =
+  process.env.NODE_ENV === "production" ? prod : dev;
 
 export default {
   // Common configs
 
-  // Dev configs
-  ...config,
-};
+  // Environment configs
+  ...envConfig,
+} as AppConfig;
