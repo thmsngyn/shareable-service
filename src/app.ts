@@ -9,7 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
 import { AppRouter } from "./app.router";
-import { LOCAL_DB_URI } from "./constants";
+import config from "./config";
 
 // Swagger jsdoc allows us to markup routes with jsdoc comments
 const swaggerSpec = swaggerJSDoc(swaggerDocument);
@@ -48,7 +48,7 @@ class App {
 
     mongoose.Promise = global.Promise;
     // The MONGODB_URI env var is set by heroku in production
-    mongoose.connect(process.env.MONGODB_URI || LOCAL_DB_URI, {
+    mongoose.connect(config.dbUri, {
       useNewUrlParser: true,
       ...deprecationWarningConfigs,
     });
