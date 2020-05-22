@@ -60,6 +60,6 @@ Router.post("/share", service.addShareRequest.bind(service));
  *       200:
  *         description: Message object
  */
-Router.delete("/share/:id", service.removeShareRequest.bind(service));
+Router.delete("/share/:id", service.removeDocumentRequest.bind(service));
 
 export default Router;

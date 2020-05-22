@@ -6,14 +6,14 @@ import { ShareModel, AccountModel } from "../../models";
 
 export class StreamService extends BaseRouterService {
   constructor() {
-    super();
+    super(ShareModel);
   }
 
   public getStreamRequest(req: Request, res: Response) {
     const { accountId } = req.params;
 
     if (accountId === "all") {
-      super.getAllDocumentsRequest(req, res, ShareModel);
+      super.getAllDocumentsRequest(req, res);
       return;
     } else {
       AccountModel.findById(accountId, (error: Error, account: any) => {
@@ -46,9 +46,5 @@ export class StreamService extends BaseRouterService {
       this.handleError(error, res);
       res.json(share);
     });
-  }
-
-  public removeShareRequest(req: Request, res: Response) {
-    super.removeDocumentRequest(req, res, ShareModel);
   }
 }

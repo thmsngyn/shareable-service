@@ -1,4 +1,5 @@
 import { Response, Request } from "express";
+import { Model, MongooseDocument } from "mongoose";
 
 import { ShareableError } from "./base-router.types";
 import {
@@ -7,13 +8,15 @@ import {
   ShareableErrorMessage,
   SpotifyToken,
 } from "./base-router.constants";
-import { MongooseDocument } from "mongoose";
 
 export class BaseRouterService {
+  public documentModel: Model<any>;
   // TODO: Remove temp token (for development)
   public token = SpotifyToken;
 
-  constructor() {}
+  constructor(documentModel: Model<any>) {
+    this.documentModel = documentModel;
+  }
 
   public handleError(error: ShareableError, res: Response) {
     let message,
@@ -61,27 +64,30 @@ export class BaseRouterService {
     }
   }
 
-  public removeDocumentRequest(req: Request, res: Response, model: any) {
+  public removeDocumentRequest(req: Request, res: Response) {
     const accountId = req.params.id;
 
     if (accountId === "all") {
-      model.deleteMany({}, (error: Error) => {
+      this.documentModel.deleteMany({}, (error: Error) => {
         this.handleError(error, res);
         res.json({ message: "All deleted" });
       });
     } else {
-      model.findByIdAndDelete(accountId, (error: Error, deleted: any) => {
-        this.handleError(error, res);
-        const message = deleted
-          ? `ID ${accountId} deleted successfully`
-          : `ID ${accountId} not found`;
-        res.json({ message });
-      });
+      this.documentModel.findByIdAndDelete(
+        accountId,
+        (error: Error, deleted: any) => {
+          this.handleError(error, res);
+          const message = deleted
+            ? `ID ${accountId} deleted successfully`
+            : `ID ${accountId} not found`;
+          res.json({ message });
+        }
+      );
     }
   }
 
-  public getAllDocumentsRequest(req: Request, res: Response, model: any) {
-    model.find({}, (error: Error, accounts: MongooseDocument) => {
+  public getAllDocumentsRequest(req: Request, res: Response) {
+    this.documentModel.find({}, (error: Error, accounts: MongooseDocument) => {
       this.handleError(error, res);
       res.json(accounts);
     });

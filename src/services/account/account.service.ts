@@ -8,7 +8,7 @@ import { AccountModel } from "../../models";
 
 export class AccountService extends BaseRouterService {
   constructor() {
-    super();
+    super(AccountModel);
   }
 
   private buildFollowers(followings: boolean[], allAccounts: any[]) {
@@ -120,13 +120,5 @@ export class AccountService extends BaseRouterService {
 
     // Resolves latest followers and runs the loginAction
     this.resolveFollowersWithAction(updateLoginAction, req, res);
-  }
-
-  public getAllAccountsRequest(req: Request, res: Response) {
-    super.getAllDocumentsRequest(req, res, AccountModel);
-  }
-
-  public deleteAccountRequest(req: Request, res: Response) {
-    super.removeDocumentRequest(req, res, AccountModel);
   }
 }

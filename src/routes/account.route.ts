@@ -22,7 +22,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Account'
  */
-Router.get("/", service.getAllAccountsRequest.bind(service));
+Router.get("/", service.getAllDocumentsRequest.bind(service));
 
 /**
  * @swagger
@@ -61,7 +61,7 @@ Router.post("/", service.addAccountRequest.bind(service));
  *         description: Message object
  *         type: string
  */
-Router.delete("/:id", service.deleteAccountRequest.bind(service));
+Router.delete("/:id", service.removeDocumentRequest.bind(service));
 
 /**
  * @swagger
