@@ -1,5 +1,5 @@
 // Service constants
-export const PORT = 4000;
+export const LOCAL_PORT = 4000;
 
 // DB constants
 export const DB_HOSTNAME = "localhost";

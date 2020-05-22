@@ -47,6 +47,7 @@ class App {
     };
 
     mongoose.Promise = global.Promise;
+    // The MONGODB_URI env var is set by heroku in production
     mongoose.connect(process.env.MONGODB_URI || LOCAL_DB_URI, {
       useNewUrlParser: true,
       ...deprecationWarningConfigs,
