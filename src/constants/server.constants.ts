@@ -5,4 +5,4 @@ export const PORT = 4000;
 export const DB_HOSTNAME = "localhost";
 export const DB_PORT = "27017";
 export const DB_NAME = "ShareableDB";
-export const DB_URI = `mongodb://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}`;
+export const LOCAL_DB_URI = `mongodb://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}`;

@@ -9,7 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
 import { AppRouter } from "./app.router";
-import { DB_URI } from "./constants";
+import { LOCAL_DB_URI } from "./constants";
 
 // Swagger jsdoc allows us to markup routes with jsdoc comments
 const swaggerSpec = swaggerJSDoc(swaggerDocument);
@@ -47,7 +47,7 @@ class App {
     };
 
     mongoose.Promise = global.Promise;
-    mongoose.connect(DB_URI, {
+    mongoose.connect(process.env.MONGODB_URI || LOCAL_DB_URI, {
       useNewUrlParser: true,
       ...deprecationWarningConfigs,
     });

@@ -10,5 +10,5 @@
     "editor.formatOnSave": true
   },
   "cSpell.ignoreWords": ["spotify", "deduped", "errmsg"],
-  "debug.node.autoAttach": "off"
+  "debug.node.autoAttach": "on"
 }
