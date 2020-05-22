@@ -4,11 +4,11 @@
   "description": "Backend service to power the Shareable frontend",
   "main": "index.js",
   "scripts": {
-    "start": "node -r ts-node/register ./src/server.ts",
+    "build": "tsc",
+    "start": "npm run build && node ./dist/server.js",
     "prestart:dev": "docker-compose up -d",
     "start:dev": "nodemon ./src/server.ts",
     "start:dev:debug": "nodemon --inspect ./src/server.ts",
-    "build": "tsc",
     "clean-containers": "docker-compose down",
     "show-containers": "docker ps"
   },
