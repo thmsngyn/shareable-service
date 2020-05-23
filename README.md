@@ -19,11 +19,12 @@ Install dependencies.
 
 Run the server.
 
-`$ npm run start:watch`
+`$ npm run start:dev`
 
-Build the project, generates artifacts in `/dist` folder.
+For a prod like build and start run:
 
 `$ npm run build`
+`$ npm run start`
 
 Optionally tear down containers.
 
