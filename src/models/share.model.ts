@@ -1,5 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 
+const schemaOptions = {
+  timestamps: true,
+};
+
 /**
  * @swagger
  *
@@ -15,16 +19,19 @@ import mongoose, { Schema } from "mongoose";
  *       trackId:
  *         type: string
  */
-export const ShareSchema = new mongoose.Schema({
-  accountId: {
-    type: String,
-    required: true,
+export const ShareSchema = new mongoose.Schema(
+  {
+    accountId: {
+      type: String,
+      required: true,
+    },
+    trackId: {
+      type: String,
+      required: true,
+    },
   },
-  trackId: {
-    type: String,
-    required: true,
-  },
-});
+  schemaOptions
+);
 
 // Make a compound index on accountId and trackId
 ShareSchema.index({ accountId: 1, trackId: 1 }, { unique: true });

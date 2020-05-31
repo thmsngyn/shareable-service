@@ -24,6 +24,7 @@ Run the server.
 For a prod like build and start run:
 
 `$ npm run build`
+
 `$ npm run start`
 
 Optionally tear down containers.

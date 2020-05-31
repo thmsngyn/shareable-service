@@ -22,7 +22,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Share'
  */
-Router.get("/:accountId", service.getStreamRequest.bind(service));
+Router.get("/:accountId/:type/:token", service.getStreamRequest.bind(service));
 
 /**
  * @swagger

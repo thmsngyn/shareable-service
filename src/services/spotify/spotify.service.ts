@@ -7,6 +7,7 @@ import {
   USER_TOP_API,
   PLAYER_PLAY_API,
   CHECK_FOLLOWING_API,
+  GET_TRACKS_API,
 } from "./spotify.constants";
 import {
   CurrentPlaybackResponse,
@@ -92,6 +93,18 @@ export const SpotifyService = new (class {
       `${CHECK_FOLLOWING_API}?type=${type}${idsParam}`,
       "GET"
     );
+  }
+
+  getTracks(token: string, ids: string[]): Promise<any> {
+    const idsParam = ids.length
+      ? `&ids=${encodeURIComponent(ids.join(","))}`
+      : "";
+
+    if (!idsParam) {
+      // We can't check if the ids list is empty, return []
+      return new Promise((resolve) => resolve([]));
+    }
+    return this.request(token, `${GET_TRACKS_API}?${idsParam}`, "GET");
   }
 
   request(
