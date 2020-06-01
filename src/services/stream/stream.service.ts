@@ -32,24 +32,26 @@ export class StreamService extends BaseRouterService {
           accountId: {
             $in: followerAccountIds,
           },
-        }).exec(async (error: Error, stream: any) => {
-          this.handleError(error, res);
-          const trackIds = (stream && stream.map((s) => s.trackId)) || [];
-          const { tracks = [] } =
-            (trackIds.length &&
-              (await SpotifyService.getTracks(token, trackIds))) ||
-            {};
-          const shares = await Promise.all(
-            tracks.map(async (track, index) => {
-              const account = await AccountModel.findById(
-                stream[index].accountId
-              ).exec();
+        })
+          .sort({ createdAt: "desc" })
+          .exec(async (error: Error, stream: any) => {
+            this.handleError(error, res);
+            const trackIds = (stream && stream.map((s) => s.trackId)) || [];
+            const { tracks = [] } =
+              (trackIds.length &&
+                (await SpotifyService.getTracks(token, trackIds))) ||
+              {};
+            const shares = await Promise.all(
+              tracks.map(async (track, index) => {
+                const account = await AccountModel.findById(
+                  stream[index].accountId
+                ).exec();
 
-              return { track, account, metadata: stream[index] };
-            })
-          );
-          res.json({ shares });
-        });
+                return { track, account, metadata: stream[index] };
+              })
+            );
+            res.json({ shares });
+          });
       });
     } else {
       ShareModel.find(
