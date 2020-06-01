@@ -13,12 +13,9 @@ export class StreamService extends BaseRouterService {
   }
 
   public async getStreamRequest(req: Request, res: Response) {
-    const { accountId, type = StreamTypes.Followers, token } = req.params;
-
-    if (accountId === "all") {
-      super.getAllDocumentsRequest(req, res);
-      return;
-    }
+    const { accountId } = req.params;
+    const { type = StreamTypes.Followers } = req.query;
+    const token = req.spotifyToken;
 
     if (type === StreamTypes.Followers) {
       AccountModel.findById(accountId, (error: Error, account: any) => {
@@ -42,7 +39,7 @@ export class StreamService extends BaseRouterService {
             (trackIds.length &&
               (await SpotifyService.getTracks(token, trackIds))) ||
             {};
-          const tracksWithAccounts = await Promise.all(
+          const shares = await Promise.all(
             tracks.map(async (track, index) => {
               const account = await AccountModel.findById(
                 stream[index].accountId
@@ -51,7 +48,7 @@ export class StreamService extends BaseRouterService {
               return { track, account, metadata: stream[index] };
             })
           );
-          res.json(tracksWithAccounts);
+          res.json({ shares });
         });
       });
     } else {
@@ -66,10 +63,10 @@ export class StreamService extends BaseRouterService {
             (trackIds.length &&
               (await SpotifyService.getTracks(token, trackIds))) ||
             {};
-          const tracksWithMetadata = tracks.map((track, index) => {
+          const shares = tracks.map((track, index) => {
             return { track, metadata: stream[index] };
           });
-          res.json(tracksWithMetadata);
+          res.json({ shares });
         }
       );
     }

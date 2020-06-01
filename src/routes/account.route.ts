@@ -1,6 +1,7 @@
 import express from "express";
 
 import { AccountService } from "../services";
+import { handleSpotifyToken, auth } from "../middleware/auth";
 
 const service = new AccountService();
 const Router = express.Router();
@@ -22,7 +23,7 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Account'
  */
-Router.get("/", service.getAllDocumentsRequest.bind(service));
+Router.get("/", auth, service.getAllDocumentsRequest.bind(service));
 
 /**
  * @swagger
@@ -45,7 +46,7 @@ Router.get("/", service.getAllDocumentsRequest.bind(service));
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/", service.addAccountRequest.bind(service));
+Router.post("/", handleSpotifyToken, service.addAccountRequest.bind(service));
 
 /**
  * @swagger
@@ -61,7 +62,7 @@ Router.post("/", service.addAccountRequest.bind(service));
  *         description: Message object
  *         type: string
  */
-Router.delete("/:id", service.removeDocumentRequest.bind(service));
+Router.delete("/:id", auth, service.removeDocumentRequest.bind(service));
 
 /**
  * @swagger
@@ -84,6 +85,6 @@ Router.delete("/:id", service.removeDocumentRequest.bind(service));
  *         schema:
  *           $ref: '#/definitions/Account'
  */
-Router.post("/login", service.loginRequest.bind(service));
+Router.post("/login", handleSpotifyToken, service.loginRequest.bind(service));
 
 export default Router;

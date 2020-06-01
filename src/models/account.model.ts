@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+import jwt from "jsonwebtoken";
+import config from "../config";
+
 /**
  * @swagger
  *
@@ -32,6 +35,15 @@ export const AccountSchema = new mongoose.Schema({
     type: [{ spotifyUserId: String }],
     default: [],
   },
+  isAdmin: Boolean,
 });
+
+AccountSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, isAdmin: this.isAdmin },
+    config.accessKey
+  ); // get the private key from the config file -> environment variable
+  return token;
+};
 
 export const AccountModel = mongoose.model("Account", AccountSchema);

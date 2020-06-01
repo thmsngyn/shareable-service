@@ -12,6 +12,7 @@
 /build
 /dist
 /svc-vol
+secrets.prod.json
 
 # misc
 .DS_Store

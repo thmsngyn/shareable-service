@@ -1,6 +1,7 @@
 import express from "express";
 
 import { StreamService } from "../services";
+import { auth, handleSpotifyToken } from "../middleware/auth";
 
 const service = new StreamService();
 const Router = express.Router();
@@ -22,7 +23,12 @@ const Router = express.Router();
  *          items:
  *            $ref: '#/definitions/Share'
  */
-Router.get("/:accountId/:type/:token", service.getStreamRequest.bind(service));
+Router.get(
+  "/:accountId",
+  auth,
+  handleSpotifyToken,
+  service.getStreamRequest.bind(service)
+);
 
 /**
  * @swagger
@@ -45,7 +51,7 @@ Router.get("/:accountId/:type/:token", service.getStreamRequest.bind(service));
  *         schema:
  *           $ref: '#/definitions/Share'
  */
-Router.post("/share", service.addShareRequest.bind(service));
+Router.post("/share", auth, service.addShareRequest.bind(service));
 
 /**
  * @swagger
@@ -60,6 +66,6 @@ Router.post("/share", service.addShareRequest.bind(service));
  *       200:
  *         description: Message object
  */
-Router.delete("/share/:id", service.removeDocumentRequest.bind(service));
+Router.delete("/share/:id", auth, service.removeDocumentRequest.bind(service));
 
 export default Router;

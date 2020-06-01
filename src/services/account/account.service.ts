@@ -11,6 +11,11 @@ export class AccountService extends BaseRouterService {
     super(AccountModel);
   }
 
+  private sendResponseWithHeaders(account, res) {
+    const token = account.schema.methods.generateAuthToken();
+    res.header("X-Auth-Token", token).send(account);
+  }
+
   private buildFollowers(followings: boolean[], allAccounts: any[]) {
     return followings
       .map((isFollowing: boolean, index: number) => {
@@ -25,7 +30,6 @@ export class AccountService extends BaseRouterService {
   /**
    * Resolves latest followers for the current user and dispatches an action (given the followers)
    * @param action Action to dispatch, receives an object as a param with followers as a field
-   * @param token Spotify access token
    * @param req Request
    * @param res Response
    */
@@ -34,7 +38,8 @@ export class AccountService extends BaseRouterService {
     req: Request,
     res: Response
   ) {
-    const { spotifyUserId, token = this.token } = req.body;
+    const { spotifyUserId } = req.body;
+    const token = req.spotifyToken;
 
     // Find all users besides the current one
     AccountModel.find(
@@ -83,7 +88,8 @@ export class AccountService extends BaseRouterService {
 
       newAccount.save((error: Error, account: MongooseDocument) => {
         this.handleError(error, res);
-        res.json(account);
+
+        this.sendResponseWithHeaders(newAccount, res);
       });
     };
 
@@ -113,7 +119,8 @@ export class AccountService extends BaseRouterService {
         { new: true },
         (error: Error, account: MongooseDocument) => {
           this.handleError(error, res);
-          res.json(account);
+
+          this.sendResponseWithHeaders(account, res);
         }
       );
     };

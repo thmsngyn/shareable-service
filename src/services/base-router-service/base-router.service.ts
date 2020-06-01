@@ -67,23 +67,16 @@ export class BaseRouterService {
   public removeDocumentRequest(req: Request, res: Response) {
     const accountId = req.params.id;
 
-    if (accountId === "all") {
-      this.documentModel.deleteMany({}, (error: Error) => {
+    this.documentModel.findByIdAndDelete(
+      accountId,
+      (error: Error, deleted: any) => {
         this.handleError(error, res);
-        res.json({ message: "All deleted" });
-      });
-    } else {
-      this.documentModel.findByIdAndDelete(
-        accountId,
-        (error: Error, deleted: any) => {
-          this.handleError(error, res);
-          const message = deleted
-            ? `ID ${accountId} deleted successfully`
-            : `ID ${accountId} not found`;
-          res.json({ message });
-        }
-      );
-    }
+        const message = deleted
+          ? `ID ${accountId} deleted successfully`
+          : `ID ${accountId} not found`;
+        res.json({ message });
+      }
+    );
   }
 
   public getAllDocumentsRequest(req: Request, res: Response) {
