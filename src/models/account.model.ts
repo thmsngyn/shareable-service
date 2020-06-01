@@ -35,6 +35,7 @@ export const AccountSchema = new mongoose.Schema({
     type: [{ spotifyUserId: String }],
     default: [],
   },
+  externalUrl: String,
   isAdmin: Boolean,
 });
 

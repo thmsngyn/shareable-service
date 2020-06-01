@@ -98,7 +98,13 @@ export class AccountService extends BaseRouterService {
   }
 
   public async loginRequest(req: Request, res: Response) {
-    const { spotifyUserId, loggedIn = true, displayName } = req.body;
+    const {
+      spotifyUserId,
+      loggedIn = true,
+      displayName,
+      imageUrl,
+      externalUrl,
+    } = req.body;
 
     // Find user and ensure they exist
     const exists = await AccountModel.exists({ spotifyUserId });
@@ -111,11 +117,13 @@ export class AccountService extends BaseRouterService {
       );
     }
 
+    const update = { displayName, imageUrl, externalUrl };
+
     // Finds and updates the account with the latest follower data and login status
     const updateLoginAction = ({ followers }: { followers: any[] }) => {
       AccountModel.findOneAndUpdate(
         { spotifyUserId },
-        { $set: { followers, loggedIn, displayName } },
+        { $set: { ...update, followers, loggedIn } },
         { new: true },
         (error: Error, account: MongooseDocument) => {
           this.handleError(error, res);
