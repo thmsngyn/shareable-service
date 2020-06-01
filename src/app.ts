@@ -32,7 +32,11 @@ class App {
     this.app.use(bodyParser.json({ limit: "50mb" }));
 
     // Enables cors
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        exposedHeaders: ["X-Auth-Token"],
+      })
+    );
 
     // Use Swagger
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

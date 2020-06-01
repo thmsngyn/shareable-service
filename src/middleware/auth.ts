@@ -35,6 +35,6 @@ export function auth(req, res, next) {
 }
 
 export function handleSpotifyToken(req, res, next) {
-  req.spotifyToken = getToken(req, "Proxy-Authorization");
+  req.spotifyToken = getToken(req, "OAuth-Authorization");
   next();
 }
