@@ -98,7 +98,7 @@ export class AccountService extends BaseRouterService {
   }
 
   public async loginRequest(req: Request, res: Response) {
-    const { spotifyUserId, loggedIn = true } = req.body;
+    const { spotifyUserId, loggedIn = true, displayName } = req.body;
 
     // Find user and ensure they exist
     const exists = await AccountModel.exists({ spotifyUserId });
@@ -115,7 +115,7 @@ export class AccountService extends BaseRouterService {
     const updateLoginAction = ({ followers }: { followers: any[] }) => {
       AccountModel.findOneAndUpdate(
         { spotifyUserId },
-        { $set: { followers, loggedIn } },
+        { $set: { followers, loggedIn, displayName } },
         { new: true },
         (error: Error, account: MongooseDocument) => {
           this.handleError(error, res);
