@@ -54,11 +54,11 @@ export class StreamService extends BaseRouterService {
           });
       });
     } else {
-      ShareModel.find(
-        {
-          accountId,
-        },
-        async (error: Error, stream: any) => {
+      ShareModel.find({
+        accountId,
+      })
+        .sort({ createdAt: "desc" })
+        .exec(async (error: Error, stream: any) => {
           this.handleError(error, res);
           const trackIds = stream.length && stream.map((s) => s.trackId);
           const { tracks = [] } =
@@ -69,8 +69,7 @@ export class StreamService extends BaseRouterService {
             return { track, metadata: stream[index] };
           });
           res.json({ shares });
-        }
-      );
+        });
     }
   }
 
