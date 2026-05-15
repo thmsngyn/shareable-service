@@ -8,18 +8,21 @@ interface AppConfig {
   appPort: string;
   dbUri: string;
   accessKey: string;
+  spotifyClientId: string;
 }
 
 const dev: Partial<AppConfig> = {
   appPort: "4000",
-  dbUri: LOCAL_DB_URI,
-  accessKey: LOCAL_ACCESS_KEY,
+  dbUri: process.env.MONGODB_URI || LOCAL_DB_URI,
+  accessKey: process.env.ACCESS_KEY || LOCAL_ACCESS_KEY,
+  spotifyClientId: process.env.SPOTIFY_CLIENT_ID || "",
 };
 
 const prod: Partial<AppConfig> = {
   appPort: process.env.PORT,
   dbUri: process.env.MONGODB_URI,
   accessKey: process.env.ACCESS_KEY,
+  spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
 };
 
 const envConfig: Partial<AppConfig> =

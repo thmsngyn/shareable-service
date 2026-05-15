@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsc",
     "start": "TS_NODE_FILES=true node ./build/src/server.js",
-    "prestart:dev": "docker-compose up -d",
     "start:dev": "TS_NODE_FILES=true nodemon ./src/server.ts",
     "start:dev:debug": "TS_NODE_FILES=true nodemon --inspect ./src/server.ts",
     "clean-containers": "docker-compose down",
@@ -32,6 +31,7 @@
     "@types/node": "^13.13.9",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.11",

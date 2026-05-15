@@ -1,6 +1,6 @@
 import { Application } from "express";
 
-import { AccountRouter, StreamRouter } from "./routes";
+import { AccountRouter, StreamRouter, SpotifyProxyRouter } from "./routes";
 
 export class AppRouter {
   constructor(private app: Application) {
@@ -10,5 +10,6 @@ export class AppRouter {
   public routes() {
     this.app.use("/accounts", AccountRouter);
     this.app.use("/stream", StreamRouter);
+    this.app.use("/spotify-proxy", SpotifyProxyRouter);
   }
 }
